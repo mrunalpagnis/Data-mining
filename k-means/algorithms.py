@@ -20,7 +20,7 @@ class KMeans:
         iterations = max number of iterations 
         
         """
-        self.centroids = []
+        self.centroids = [50,49,48,47,46]
         
         self.prev_centroids = []
         
@@ -28,11 +28,11 @@ class KMeans:
         self.initialize_centroids(data, k)
         
         #initializes current centroids
-        self.initialize_optimal_(data, k)
+        #self.initialize_optimal_(data, k)
         
-        while len(self.centroids) > len(set(self.centroids)):
-            self.initialize_optimal_(data, k)
-        #print self.centroids
+#         while len(self.centroids) > len(set(self.centroids)):
+#             self.initialize_optimal_(data, k)
+#         #print self.centroids
         
         
     def cluster(self,data,k,iterations):
@@ -43,6 +43,7 @@ class KMeans:
         clusters =  [[] for i in range(k)]
         
         while not (self.do_i_stop(i, iterations)):
+            i+=1;
             
             # assign data points to cluster
             clusters = self.assign_data_to_cluster(k,data)
@@ -73,7 +74,7 @@ class KMeans:
     def initialize_optimal_(self,data,k):
         #select the first centroid randomly and then rest centroids farthest apart from each other
         
-        self.centroids.append(np.mean(data))
+        self.centroids.append(np.random.choice(data))
 
         i = 0
         
@@ -130,18 +131,20 @@ class KMeans:
         print self.centroids
         
     def do_i_stop(self,i,iterations):
-        
-        
-        diff = np.abs(np.subtract(self.prev_centroids,self.centroids))
-        
-        if (diff.all()==0.0):
-            print "yes"
+        if i >= iterations:
             return True
-        #elif i==iterations:
-            #return True
-        else:
-            return False
+        return False
         
+#         diff = np.abs(np.subtract(self.prev_centroids,self.centroids))
+#         
+#         if (diff.all()==0.00):
+#             print "yes"
+#             return True
+#         #elif i==iterations:
+#             #return True
+#         else:
+#             return False
+#         
     def minimum_value_index(self,distance):
         
         min = distance[0]
@@ -168,3 +171,20 @@ class KMeans:
                 index = i
         
         return index
+            
+        
+    
+import algorithms as alg
+
+if __name__ == '__main__':
+    
+    data = [i for i in range(60)]#[-1,0,2,3,4,10,9,8,7,6,5,-3,-5,-2]#,11,12,13,14,15,16,17,18,19,20]
+    
+    
+    k = 5
+    
+    iterations = 50
+    
+    cluster = alg.KMeans(data,k,iterations)
+    
+    cluster.cluster(data,k,iterations)
