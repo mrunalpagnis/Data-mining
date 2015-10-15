@@ -19,24 +19,24 @@ public class Cancer {
  * 	  
 ***/
 	
-	private int SCN;
+	private Double SCN;
 	private List<Double> predictors;
-	private int classY;
+	private Double classY;
 	
 	
 	
 	/**
 	 * @return the sCN
 	 */
-	public int getSCN() {
+	public Double getSCN() {
 		return SCN;
 	}
 	
 	/**
-	 * @param sCN the sCN to set
+	 * @param double1 the sCN to set
 	 */
-	public void setSCN(int sCN) {
-		SCN = sCN;
+	public void setSCN(Double double1) {
+		SCN = double1;
 	}
 	
 	/**
@@ -56,14 +56,14 @@ public class Cancer {
 	/**
 	 * @return the classY
 	 */
-	public int getClassY() {
+	public Double getClassY() {
 		return classY;
 	}
 	
 	/**
 	 * @param classY the classY to set
 	 */
-	public void setClassY(int classY) {
+	public void setClassY(Double classY) {
 		this.classY = classY;
 	}
 
