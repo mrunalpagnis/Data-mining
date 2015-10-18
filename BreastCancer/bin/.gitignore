@@ -1,6 +1,3 @@
-/Data.class
-/Cancer.class
-/Cleaner.class
-/DataPreprocesser.class
-/DataPreprocessor.class
-/KMeans.class
+/random.class
+/Cluster.class
+/KMeans2.class

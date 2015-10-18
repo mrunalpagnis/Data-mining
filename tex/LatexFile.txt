@@ -1,0 +1,589 @@
+% LaTeX Article Template - customizing header and footer
+\documentclass{article}
+
+\newtheorem{thm}{Theorem}
+
+% Set left margin - The default is 1 inch, so the following 
+% command sets a 1.25-inch left margin.
+\setlength{\oddsidemargin}{0.25in}
+
+% Set width of the text - What is left will be the right margin.
+% In this case, right margin is 8.5in - 1.25in - 6in = 1.25in.
+\setlength{\textwidth}{6in}
+
+% Set top margin - The default is 1 inch, so the following 
+% command sets a 0.75-inch top margin.
+\setlength{\topmargin}{-0.25in}
+
+% Set height of the header
+\setlength{\headheight}{0.3in}
+
+% Set vertical distance between the header and the text
+\setlength{\headsep}{0.2in}
+
+% Set height of the text
+\setlength{\textheight}{9in}
+
+% Set vertical distance between the text and the
+% bottom of footer
+\setlength{\footskip}{0.1in}
+
+\DeclareMathSizes{10}{15}{10}{10}
+
+
+% Set the beginning of a LaTeX document
+\usepackage{multirow}
+\usepackage{natbib}
+\usepackage{fullpage}
+\usepackage{graphicx}
+\usepackage{amsthm}
+\usepackage{amssymb}
+\usepackage{url}
+\usepackage{algpseudocode}
+\usepackage{listings}
+\graphicspath{%
+    {converted_graphics/}% inserted by PCTeX
+    {/}% inserted by PCTeX
+}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\lstset{
+numbers=left, 
+numberstyle=\small, 
+numbersep=8pt, 
+frame = single, 
+language=R, 
+framexleftmargin=15pt}
+
+\begin{document}
+\title{CSCI-B 565  DATA MINING \\
+        Assignment-2 \\
+        Afternoon Class\\
+        Computer Science - Fall 2015\\
+        Indiana University\\
+        }         
+% Enter your title between curly braces
+\author{Mrunal Pagnis \\
+        mmpagnis@indiana.edu }
+\date{13 October 2015}
+
+\maketitle
+
+
+% Redefine "plain" pagestyle
+\makeatother     % `@' is restored as a "non-letter" character
+
+
+
+% Set to use the "plain" pagestyle
+\pagestyle{plain}
+\section*{I assure that the homework solution presented in this document is my own work}
+
+\section{Question 1}
+
+\subsection{Solutions}
+
+\begin{enumerate}
+\item \hbox{Does the algorithm always converge? Given your answer, what extra formal parameter is needed  to the function.  How do you decide it's actual value?
+\\\em Answer:\\ \sf}
+    
+    The K-Means algorithm is said to converge when there is no change in the consecutive centroids. However, exactly same consecutive centroids is difficult to achieve in practice. Due to reasons like flipping of centroids and floating points errors the algorithm may not always converge. The convergence also depends on the Distance function used. Euclidean distance is a monotone function which goes on decreasing or remains same. Other functions like Manhattan may never lead to convergence. Having said that, in practice things are difficult to achieve.  
+    \\Now, by considering ${\tau}$ the percentage change in centroids we can allow a tolerance or margin or change in the consecutive centroids. So we say that the algorithm has converged when there is less than ${\tau}$ percent change. The good thing is that we get to decide this value of ${\tau}$ which means ${\tau}$ is the quality of clustering achieved. For instance, when the optimality of clusters is less important than the time required for clustering then ${\tau}$ value can be set to a higher value. When the accuracy is more important we keep ${\tau}$ closer to zero. 
+    \\However, we may want to fix the value of ${\tau}$ that best describes the percentage change we are targeting. This may not always guarantee the termination as the run-time of K-Means may take years to achieve the ${\tau}$ we are expecting. So we need another parameter which allows us to tell K-Means not to continue beyond a point. 
+    \\We can achieve this by introducing a new formal parameter 'Maximum-Iterations'. So, if it is taking more than 'Maximum-Iterations' to achieve a percentage change less than ${\tau}$ then we ask the K-Means to stop and return the centroids at that point. In other words, we are specifying the maximum iterations we can wait to achieve the change as close to ${\tau}$
+    \\We can decide the value of Maximum-Iterations by one of the many ways:
+    \begin{itemize}
+    \item Estimating from the number of instances in Dataset
+    \item Arbitrarily setting a value
+    \item By adjusting the arbitrary value by looking at the results
+    \end{itemize}
+
+
+\item What is the reason initialization of $k$-means is problematic?
+
+\hbox{\em Answer: \\} 
+\sf Firstly, there is no particular way to initialize the K-Means. There are multiple ways in which one can initialize the centroids. Secondly, each method has its own pros and cons.\\
+
+I would like to discuss about  a few such initialization techniques:
+
+    \begin{itemize}
+    \item \em Choose centroids randomly from $DOM(\Delta)$\\
+        \sf In this method, the centroids are initialized to a different value each time we run the K-Means, so in each run there is high probability of getting different clusters. Another issue with the random selection of centroids is that we need to know the distribution of the function so that the selected centroids are evenly distributed in the data.
+    \item \em Choose centroids from the sequence of data
+    \sf ${C_{0}=\delta_{0}}$, ${C_{1}=\delta_{1}}$, ..., ${C_{k}=\delta_{k}}$\\
+    This might lead to forming singleton clusters depending on the nature of data. There is a chance of centroids being too close in the final output. The distribution of the data is not addressed by this type of initialization.
+    \item \em Selecting Farthest centroids: ${C_{0}=Random(DOM(\delta))}$, ${C_{1}=}$ farthest point from ${C_{0}}$, ${C_{2}=}$ farthest point from ${C_{1}}$, ... and so on.\\
+    \sf Let us consider a set: $\{{1,2,3,...10}\}$ we want to run K-Means on. Let us say k=3.\\
+    Now in this type of initialization the first centroids gets selected randomly, so we pick ${C_{0} = 1}$ the farthest point to this will be 10. ${\therefore C_{1} = 10}$. For the third centroid we again get ${C_{1} = 1}$ because 1 is farthest to 10. 
+    \\Above example clearly shows that duplicate centroids may get assigned due to this method.
+    \end{itemize}
+    As we see there is no fixed method to initialize the centroids and thus, there are different problems associated with different methods. We have to trade-off according to what best suits our data-set.
+\item \hbox{What is the run-time of this algorithm (include your new parameter from Question 1.\\
+\em Answer: \\ \sf}
+
+${\mathcal{O}(|\Delta|*A*k*i)}$\\
+$where$ \\
+${|\Delta| }$ \it is the number of instances in the data-set\\
+A is the number of dimensions or attributes in the data-set\\
+k is the number of clusters\\
+i is the extra-formal parameter 'Maximum-Iterations' K-Means should run\sf
+\item \hbox{In line 21, we use $ave$ to indicate average; however, the centroid is more correctly the best representative of the data that nearest.  Give two more ways (functions) that yield a best representative.\\
+\em Answer: \\ \sf }
+
+    \begin{itemize}
+    
+    \item Medoids:\\
+    A \it medoid \sf of a finite data-set is a data point from this set, whose average dissimilarity to all the data points is minimal i.e. it is the most centrally located point in the set.\cite{kmeWiki} 
+    The centroid now becomes the \it medoid \sf. So in essence it is the closest element to all other elements in that cluster. There is an algorithm which uses \it medoid \sf known as k-Medoids Algorithm. This algorithm is similar to K-Means to a great extent. This algorithm is more robust to noise and outliers than K-Means. This is because it minimizes the pairwise dissimilarities between data points than just minimizing the sum squared error.  
+    
+    \item Weighted Average
+    Another alternative to average is a weighted average. We can weigh the points in the clusters depending on how close they are to the centroid. It can be mathematically represented as follows:
+    
+    \[
+    f(x) = \frac{\sum_{i=0}^{n} w_{i} * x_{i}}{\sum_{i=0}^{n} w_{i}}
+    \]    
+    where \\
+         $x_{i}$ is the data point\\
+         $w_{i}$ is the weight associated with $x_{i}$\\
+    We can calculate the weight relative to the distance of the data point to its centroid. 
+    
+    A variation of weighted Average is the fuzzy weighted average. As we see in above equation that the data-point is directly used to calculate the value. In fuzzy weighted average we take a soft membership of the data-point with the centroids meaning the degree of closeness to centroid. 
+    
+    \end{itemize}
+
+\item \hbox{Modify the algorithm to identify when two centroids are \it too \sf close to one another.   There will likely be more than one extra parameter needed to the algorithm.  Discuss what your modification does.\\}
+
+\em Answer: \\\sf
+
+\hbox{We have studied the inter-block distance earlier. Inter-block distance gives an idea of how close or far the blocks are to each other. We can find the proximity of two centroids in the similar way. First we calculate the inter-block distance for clusters and then compare is with previous inter-block distance. If the distance increases we can say that the centroids are moving apart however, if the distance decreases that means the centroids are coming closer. However, we need a measure or a threshold that gives a relative closeness. We define it as minimum-closeness $\nu$. If the change in the inter-block distances is less than $\nu$ then we say the centroids are too close. \\\\}
+
+The algorithm is defined as follows:
+
+\begin{center}
+\begin{algorithmic}[1]\label{kmeans}
+\State{\bf ALGORITHM} \texttt{kmeans}
+\State {\bf INPUT} (\textsf{data} $\Delta$, distance $d:\Delta^2\rightarrow \mathbb{R}_{\geq 0}$, \textsf{centoid number} $k$, \textsf{threshold} $\tau$, \textsf{Maximum-Iterations } $\iota$, \textsf{minimum-closeness} $\nu$)
+\State {\bf OUTPUT} (\textsf{Set of centoids} $c_1, c_2, \ldots, c_k$)
+\State Assume centroid is structure $c = (v \in DOM(\Delta), B\subseteq \Delta)$
+\State  $c.v$ is the centroid value and $c.B$ is the set of nearest points.
+\State $\tau$ is a percentage change from previous centroids
+\State For example, $\{c_1, c_2, \ldots, c_k\}$ is previous and $\{d_1, d_2, \ldots, d_k\}$ is current
+\State Total difference is $\Sigma_i \Sigma_j d(c_i, d_j)$
+\State $\iota$ is the maximum number of iterations the algorithm is allowed to run.
+\State Assume $IBD$ is the inter-block distance between clusters 
+\State Assume $IBD'$ is the inter-block distance between clusters
+\State $\nu$ is the minimum-closeness we would like to achieve
+\State $Dom(\Delta)$ denotes domain of object.
+\State $i = 0$
+\Comment{Initialize iterate where superscript is iteration}
+\For{$j = 1,k$}
+\Comment{Initialize Centroids}
+\State $c_j^i.v \gets  random(Dom(\Delta))$
+\State $c_j^i.B \gets \emptyset$
+\EndFor
+\State $f_i = \Sigma_{j=1}^k\Sigma_{\ell = 1}^k d(c_j^i.v, random(Dom(\Delta))$
+\Comment{Bootstrap difference between past centroids and current}
+\Repeat
+\State $i \gets i + 1$
+\For {$\delta \in \Delta$}
+\State $c_j^i.B \gets c.B \cup \{\delta\}$, where $\min_{c_j^i}\{d(\delta, c_j^i.v)\}$
+\State \Comment{Associate a data point $\delta$ with the nearest centroid $c_j^i.v$}
+\EndFor
+\For {$j = 1, k$}
+\State $c_j^i.v \gets ave(c_j^i.B)$
+\Comment{Update centroid to be {\it best} representative of nearest data}
+\State $c_j^i.B \gets \emptyset$
+\Comment{$ave$ is easiest representative}
+\EndFor
+
+\State $f_i \gets \Sigma_{j = 1}^{k}\Sigma_{\ell = 1}^{k}d(c_j^{i}.v, c_\ell^{i-1})$ \\
+
+\Comment{Find the difference between previous centroids and current centroids}\\
+\State $X = \{c_{0}.B, c_{1}.B, ..., c_{k}.B\}$ 
+\State $IBD \gets RE(X,d)$
+\Comment{Calculate inter-block distance from the partition X}\\
+\Comment{Use the distance function d same as K-Means}\\
+
+\State $p \gets   (| f_{i} - f_{i-1}| < \tau(f_{i-1}))$
+\State $q \gets   ( IBD_i - IBD'_{i-1} > \nu)$
+\State $r \gets   (i>\iota)$
+
+\Until{$(p$ $and$ $q$ $and$ $r)$}
+
+\Comment{we're finished, If there's less than $\tau$ change.}\\
+\Comment{and if there's greater than $\nu$ change.}\\
+\Comment{or if we reached $\iota$ iterations.}\\
+
+\State {\bf return} ($c_1^i, c_2^i, \ldots, c_3^i$) 
+\end{algorithmic}
+\end{center}
+
+\begin{center}
+\begin{algorithmic}[1]\label{Inter-block Distance}
+\State{\bf ALGORITHM} \texttt{Inter-block Distance}
+\State    $RE(x,d)$
+\State	  $v\leftarrow0;$  $x=\{b_{1}, .... , b_{k}\}$ 
+\State	  for $i=1$ $to$ $k-1$ 
+\State	  	for $j = i+1$ $to$ $k-1$ 
+\State	  		$v = v + INTERBLOCKDIS(b_{i},b_{j},d)$ 
+\State	  {\bf return $v$} 
+\end{algorithmic}
+\end{center}
+\begin{center}
+\begin{algorithmic}[1]\label{Internal function}
+\State{\bf ALGORITHM} \texttt{Internal function}
+\State	  $INTERBLOCKDIS(x,y,d)$
+\State	  $v=0;$ $x=\{x_{1},x_{2}....x_{l}\}$
+\State	  $y=\{y_{1},....y_{m}\}$ 
+\State	  for $i=1$ $to$ $l-1$ 
+\State	  	for $j = 1$ $to$ $m$ 
+\State	  	    $ v = v + d(xi,yj)$ 
+\State	   {\bf return $v$}\\
+
+\end{algorithmic}
+\end{center}
+
+The algorithm has an extra parameter $\nu$ which gives the minimum-closeness. The condition that checks change in inter-block distance less than $\nu$ affects the loop of the algorithm. In other words, it affects the convergence of the algorithm. It knows if centroids are going apart or coming closer. However, it does not give a feedback about which direction should the next iteration be. I would like to further work on this to see if there is a way we can modify the algorithm to give feedback about the direction.
+
+\item Following are the answers:
+
+\begin{enumerate}
+\item $\neg x = \mathcal{U} - \{a,b,c,d\} = \{e,f\}$
+\item $\neg\, \mathcal{U} = \emptyset$
+\item $d(x,y) = 1$
+\item $d(x\cap y, \{a, b\}) = 0$
+\item $d(x, x \cup y) =1$\\
+Length of x and $x\cup y$ is different. Clearly they are different.
+\item $d(\neg(x \cap y), \neg x \cup \neg y) =0$
+\\This is nothing but de-morgan's rule. $(\neg(x \cap y) = (\neg x \cup \neg y)$ So they are exactly equal.\\
+\end{enumerate}
+
+\begin{eqnarray*}  J(x,y) &=&|x \cap y|/|x \cup y| \\   d(x,y) &=& 1-J(x,y) \end{eqnarray*}
+The signature of the distance function is: $d:\mathsf{Set}^2 \rightarrow \mathbb{R}_{\geq 0}$.
+\begin{enumerate}
+\item 
+
+$d(x,y)\\$ 
+    $= 1 - |\{a,b,c,d\}\cap\{a,b,e\}|/|\{a,b,c,d\}\cup\{a,b,e\}|\\$
+       $= 1 - |\{a,b\}|/|\{a,b,c,d,e\}| \\$
+       $= 1 - 2/5 \\$
+       $= 3/5
+$
+
+\item $d(x\cap y, \{a, b\}) = $
+$= 1 - |(\{a,b,c,d\}\cap\{a,b,e\})\cap\{a,b\}|/|(\{a,b,c,d\}\cap\{a,b,e\})\cup\{a,b\}|\\$
+       $= 1 - |\{a,b\}|/|\{a,b\}| \\$
+       $= 1 - 1 \\$
+       $= 0
+$
+\item $d(x, x \cup y) = 1/5$
+\item $d(\neg(x \cap y), \neg x \cup \neg y) =0$
+\end{enumerate}
+\item Assume bit vectors (as strings of 0's and 1's)  over the set $\{a,b,c,d,e,f\}$.  Then $x = \{a,b,c,d\}$ is $\mathrm{\bf x} = 111100$.  Similarly, $\mathrm{\bf y} = 110010, \mathrm{\bf z} = 010001$.  Individually, $ \mathrm{\bf x}[0] = 1, \mathrm{\bf x}[1] = 1$, {\it etc.}  To remind the student, $\perp$ means the program stopped because of a bad computation. Let the distance function be the Hamming distance between the vector:
+\begin{eqnarray}
+c(x,y) &=& \left\{\begin{array}{l}0, \ \ \ x = y\\ 1, \ \ \ ot herwise\end{array}\right. \mbox{\rm for individual characters}\\
+d(\mathrm{\bf x},\mathrm{\bf y}) &=& \Sigma_{i=0}^{n}c(\mathrm{\bf x}[i], \mathrm{\bf y}[i]) \ \ \ \ n = ||\mathrm{\bf x}||, \mbox{\rm the length of the string.}
+\end{eqnarray}
+The signature of the distance function is: $d:\mathsf{String}^2 \rightarrow \mathbb{R}_{\geq 0}$.  Assume we have some string functions and a constant:
+\begin{eqnarray}
+\textvisiblespace &=& \mbox{\rm space}\\
+concat(\texttt{b}, \texttt{at}) &=& \texttt{bat}\\
+concat(\texttt{bat}, \epsilon) &=& \texttt{bat}\\
+contat(\epsilon, \texttt{bat}) &=& \texttt{bat}\\
+upper(\texttt{a}) &=& \texttt{A}\\
+space(\texttt{b\textvisiblespace a\textvisiblespace t}) &=& \texttt{bat}
+\end{eqnarray}
+\begin{enumerate}
+\item $d(\texttt{x}, \texttt{y}) = 3$
+\item $d(concat(\texttt{x}, \texttt{x}), concat(\texttt{x},\texttt{y})) = 3$
+\item Discuss the two problems above. \\
+The above $d(\texttt{x}, \texttt{y})$ is 3 because there are three bits different in x and y. In the next example, x is concatenated before x and y. However, it does not affect the distance because the concatenated part is same and the bit string is equal. 
+\item $d(\texttt{N\textvisiblespace orth}, \texttt{nort\textvisiblespace h}) = 5$
+\item $d(upper(space(\texttt{N\textvisiblespace orth})), upper(space(\texttt{nort\textvisiblespace h}))) = 0$
+\item $d(\texttt{north}, \texttt{south}) = 2$
+\item Because strings are seldom fixed to any length, finding distance is even more difficult. strings of unequal length.  The table below shows {\it some} strings indicating the direction prefixed or suffixed to addresses:
+\begin{center}
+\begin{tabular}{l} \hline 
+NORTH \\
+North \\
+N \\
+N. \\
+north \\
+nor \\
+n.\\  
+\textvisiblespace n \\ \hline 
+\end{tabular}\end{center}
+ So the original distance would simply not function, {\it e.g.,} 
+\begin{eqnarray}  d(\texttt{N.}, \texttt{North}) &=& \perp\end{eqnarray}
+How would you rewrite the distance function to effectively deal with this problem?\\
+\begin{eqnarray} d(x,y) &=& \left\{\begin{array}{l} 0,\ \ \ upper(space(x))[0] = upper(space(y))[0] \\ 1,\ \ \  otherwise \end{array}\right. \end{eqnarray}
+\\ If the first character after removing spaces matches in both strings then we have found a match else not.
+
+\end{enumerate}
+\item Assume your data is a set and string pair,  $\delta = ( \textsf{Set}\ x, \textsf{String}\ y)$.  Create a metric over this pair.  In otherwords, 
+\begin{eqnarray*}
+d((\textsf{Set}\ x_1, \textsf{String}\ y_1), (\textsf{Set}\ x_2, \textsf{String}\ y_2)) &=& 
+\end{eqnarray*}
+Demonstrate that it is indeed a metric.\\
+Let us assume that it is the pair of keywords of an article and the label is the name of the article. We would like to know how close the two articles are to each other. 
+We can do this as follows:
+\begin{eqnarray*} 
+d((\textsf{Set}\ x_1, \textsf{String}\ y_1), (\textsf{Set}\ x_2, \textsf{String}\ y_2)) &=& \left\{\begin{array}{l} 0,\ \ \  |x_{1}\cap x_{2}|> total(|x_{1}\cup x_{2}|)/2 \\ 1,\ \ \  otherwise \end{array}\right.
+\end{eqnarray*}
+This is simply like matching half the words. If more than half of the keywords then the articles are similar. There are other ways to do this also. The above function satisfies the following characteristics:
+\begin{itemize}
+\item Symmetric:\\
+    $d((\textsf{Set}\ x_1, \textsf{String}\ y_1), (\textsf{Set}\ x_2, \textsf{String}\ y_2))=d((\textsf{Set}\ x_2, \textsf{String}\ y_2), (\textsf{Set}\ x_1, \textsf{String}\ y_1))$
+\item Reflexive:\\
+    $d((\textsf{Set}\ x_1, \textsf{String}\ y_1), (\textsf{Set}\ x_2, \textsf{String}\ y_2))=d((\textsf{Set}\ x_1, \textsf{String}\ y_1), (\textsf{Set}\ x_2, \textsf{String}\ y_2))$
+\item transitive:\\
+    Let there be three pairs $(p,p_{l})$, $(q,q_{l})$ and $(r,r_{l})$ such that\\
+    
+    $d1 = d((\textsf{Set}\ p, \textsf{String}\ p_l), (\textsf{Set}\ q, \textsf{String}\ q_l))$\\
+    $d2 = d((\textsf{Set}\ q, \textsf{String}\ q_l), (\textsf{Set}\ r, \textsf{String}\ r_l))$\\
+    $d3 = d((\textsf{Set}\ p, \textsf{String}\ p_l), (\textsf{Set}\ r, \textsf{String}\ r_l))$\\
+    
+    for the cases $p=q$, $p=r$, $q=r$, $p=q=r$ and $p \neq q \neq r$, \\
+    
+   $d1 + d2 \geq d3\\$
+    
+\end{itemize}
+A more formal way would be calculating the cosine distance between the set of keywords and the value is the degree of similarity. 
+\end{enumerate}
+
+\section{Question 2}
+
+\subsection{Solutions}
+
+\bf{Application of $k$-means to medical data}\\
+
+The given data is in a raw form, not clean and also contains duplicates. Here are some facts from the given rawData:\\
+
+\begin{itemize}
+\item There are 16 missing values. These 16 values are from the same attribute and each missing value is from a different tuple. 
+\item There are 8 tuples which have exact duplicates. (All attributes are same).
+\item There are 46 tuples which have duplicate SCN. 
+\item If we divide the data into malignant and benign, then there are 4 tuples which occur in both malignant and benign. 
+\end{itemize}
+
+
+In order to solve the following questions I have cleaned the data. I have multiple versions of data-set. Different versions of data-set may be applicable to different questions. These different versions are based on certain assumptions. The modified data-set and its assumption is as follows:\\
+\begin{center}
+\begin{table}[ht]
+\centering
+\begin{tabular}{|c||p{10cm}|}
+\hline
+data & {\texttt{Description}}\\ \hline 
+rawData &  {\texttt{Extracted from original data file}} \\ \hline
+missingData & {\texttt{Only those tuples which have missing attributes. This data consits of the 16 rows with missing attributes.}} \\ \hline
+cleanData & {\texttt{Obtained after removing the missingData from rawData}} \\ \hline
+uniqData & {\texttt{Does not contain any duplicate rows. This data is obtained after removing duplicate 8 rows from cleanData.}} \\ \hline
+uniqSCNData1 & {\texttt{All SCNs are unique. The 46 duplicates have been assigned a new unique SCN.}} \\ \hline
+uniqSCNData2 & {\texttt{All SCNs are unique. All rows that have duplicate SCNs are removed from the data.}} \\\hline
+imputeData & {\texttt{This is obtained by imputing the missing values.}} \\ \hline
+malignant & {\texttt{tuples whose Class is 4 (Classified as malignant).}} \\ \hline
+benign & {\texttt{tuples whose Class is 2 (Classified as benign).}} \\ \hline
+\end{tabular}
+\caption{Data-sets formed and their descriptions}
+\label{tab:my_label}
+\end{table}
+\end{center}
+\begin{enumerate}\item  Suppose you're working to help a clinic serve a community that has limited resources to identify then treat breast cancer.  The cost of a biopsy is from \$1000 to \$5000.  The cost of a masectomy is \$15,000 to \$55,000 (these are representative costs in 2015).   
+
+ \begin{enumerate} \item What was the total cost of the biopsies? 
+ 
+ \begin{itemize}
+  \item considering data-set 691 tuples (uniqData + missingData):
+ Minimum cost for biopsy is \$1000: Total cost assuming the average rate per biopsy is: $691*1000=$ = \$691000.
+ \item considering data-set 691 tuples (uniqData + missingData):
+ Average cost for biopsy is \$3000: Total cost assuming the average rate per biopsy is: $691*3000=$ = \$2073000.
+  \item considering data-set 691 tuples (uniqData + missingData):
+ Average cost for biopsy is \$5000: Total cost assuming the average rate per biopsy is: $691*5000=$ = \$3455000.
+ \end{itemize}
+ 
+ \item What would have been the likely total cost of masectomies?
+  \begin{itemize}
+  \item considering data-set 238 tuples (malignant):
+ Minimum cost for biopsy is \$15000: Total cost assuming the average rate per biopsy is: $238*15000=$ = \$3570000.
+ \item considering data-set 238 tuples (malignant):
+ Average cost for biopsy is \$35000: Total cost assuming the average rate per biopsy is: $238*35000=$ = \$8330000.
+  \item considering data-set 238 tuples (malignant):
+ Average cost for biopsy is \$55000: Total cost assuming the average rate per biopsy is: $238*55000=$ = \$13090000.
+ \end{itemize}
+ \end{enumerate}
+ 
+ \item Ignoring the \texttt{Sample code number} (SCN), how many attributes does $\Delta$ have?  \\
+ There are 9 Attributes excluding the SCN and class label.
+ 
+ \item How many missing values exist (total)? How many patients have missing values? Give the SCNs for that have missing data.  Of these data, would you have recommended re-examination for the women?  What would be the cost be?  What is the error rate (in otherwords, given $x$ as the number of patients, what is $f(x) = y$ where $y$ is the number of mistakes.  Remove the tuples that have missing data.  Let $\Delta^*$ be a cleaned $\Delta$: the tuples with the missing values are removed. \texttt{R} offers several ways to remove unknown data, though you are free to write your own code.  Let $\Delta^m = \Delta - \Delta^*$.  For each $\delta \in\Delta^m$, replace the unknown data using one of the techniques we discussed in class; alternatively, you may employ your won approach.  No matter how you decide to replace the unknowns, explain fully.  The final data should be presented as $(\texttt{SCN}, A_i, data)$ where \texttt{SCN} is the tuple key, $A_i$ is the attribute, and $data$ is the new data.
+ \begin{itemize}
+ \item 16 missing values
+ \item 16 rows with missing values
+ \item 
+ \end{itemize}
+ \begin{enumerate} 
+ \item Is the amount of missing data significant?\\
+ 
+ \item Assess the significance of either keeping or removing the tuples with unknown data. You should consider both the morbidity and cost.
+ \end{enumerate}
+ 
+\item Assume the attribute \texttt{Clump Thickness} is $A_1$, \texttt{Uniformity of Cell Size} is $A_2$ and so on.  Attribute $A_{10}$ has only two domain values and is the classifier. For $\Delta^*$ and  the attributes $A_i, 1\leq i \leq 9$ \begin{enumerate} 
+\item which $A_i$ has the greatest variance? You will write an {\texttt R} function that takes a list of numbers and returns the variance. \\
+
+Following is the R function for calculating variance:\\
+
+\begin{center}
+\begin{lstlisting}[language=R]
+variance <- function(numbers){
+  m <- mean(as.numeric(numbers))
+  sumOfSq <- sum((numbers-m)^2)
+  var <- sumOfSq/length(numbers)
+  return(var)
+}
+numbers <- c(1,2,3)
+variance(numbers)  => 0.667
+\end{lstlisting}
+\end{center}
+
+\begin{table}[]
+\centering
+\begin{tabular}{|c|c|}
+\hline
+Clump Thickness & 7.94546 \\ \hline
+Uniformity of Cell Size & 9.31923 \\ \hline
+Uniformity of Cell Shape & 8.846736 \\ \hline
+Marginal Adhesion & 8.258647 \\ \hline
+Single Epithelial Cell Size & 4.870233 \\ \hline \hline
+\em{Bare Nuclei} & \em{13.2145} \\ \hline \hline
+Bland Chromatin & 6.012673 \\ \hline
+Normal Nucleoli & 9.384024 \\ \hline
+Mitoses & 3.026612 \\ \hline
+\end{tabular}
+\caption{The variances of attributes}
+\label{tab:my_label}
+\end{table}
+
+As we can see the table shows Maximum variance is of {\em{Bare Nuclei 13.2145}}
+
+\item which $A_i$ has the lowest entropy? You may use the {\texttt R} package {\texttt {entropy}} by Hausser and Strimmer.  \\
+
+I used the Entropy package\cite{hsEntropy} with help of the following R commands:
+\begin{center}
+\begin{lstlisting}[language=R]
+install.packages("entropy")
+library(entropy)
+entropy.empirical(uniqData$V2, unit=c("log"))
+\end{lstlisting}
+\end{center}
+ 
+\begin{center}
+\begin{table}[ht]
+\centering
+\begin{tabular}{|c|c|}
+\hline
+Clump Thickness & 6.310634 \\ \hline
+Uniformity of Cell Size & 6.111481 \\ \hline
+Uniformity of Cell Shape & 6.138426 \\ \hline
+Marginal Adhesion & 6.105003 \\ \hline
+Single Epithelial Cell Size & 6.324374 \\ \hline \hline
+\em{Bare Nuclei} & \em{6.045939} \\ \hline \hline
+Bland Chromatin & 6.284522 \\ \hline
+Normal Nucleoli & 6.06034 \\ \hline
+Mitoses & 6.179103 \\ \hline
+\end{tabular}
+\caption{The Entropy values of each attribute.}
+\end{table}
+\end{center}
+As we can see the table shows Lowest Entropy is of {\em{Bare Nuclei 6.045939}}\\
+
+\item Fill-in the table below  with the KL distance for attribute pairs.  For this we construct a mass function $P_i$ over $A_i$ by simple counting.  For a cell whose row, column entries are $A_i, A_j$, find $d_{KL}(P_i||P_j)$.  You may use an existing {\texttt {R}} function for this, but you need to provide sufficient package details for someone who would consider using that package.\\ \sf
+
+The Kullback-Leibler divergence is
+\begin{eqnarray*}
+KL(p||q) =  &=& \Sigma_{i=1}^n p_i \log \frac{p_i}{q_i}
+\end{eqnarray*}
+
+\pagebreak
+The KL divergence R script:
+
+{\it{Note: Many packages use log base = 2. However, my implementation uses natural log.}}
+
+\begin{lstlisting}[language=R]
+divergence <- function(p,q){
+  sum = 0
+  for(i in 1:10){
+    sum = sum + (p[i]/675)*log(p[i]/q[i])
+  }
+  return(sum)
+}
+
+mat = matrix(nrow = 10, ncol = 9)
+res1 <- count(uniqData$V2)
+mat[,1] <- res1$freq
+res2 <- count(uniqData$V3)
+mat[,2] <- res2$freq
+res3 <- count(uniqData$V4)
+mat[,3] <- res3$freq
+res4 <- count(uniqData$V5)
+mat[,4] <- res4$freq
+res5 <- count(uniqData$V6)
+mat[,5] <- res5$freq
+res6 <- count(as.numeric(uniqData$V7))
+mat[,6] <- res6$freq
+res7 <- count(uniqData$V8)
+mat[,7] <- res7$freq
+res8 <- count(uniqData$V9)
+mat[,8] <- res8$freq
+res9 <- count(uniqData$V10)
+mat[1:8,9] <- res9$freq[1:8]
+mat[9,9] <- 0
+mat[10,9] <- res9$freq[9]
+
+kl = matrix(nrow=9, ncol=9)
+for(i in 1:9){
+  for(j in 1:9){
+    if(i==j){
+      kl[i,j] = 0
+    }
+    else{
+      kl[i,j] = divergence(mat[,i],mat[,j])
+    }
+  }
+}
+print(kl)
+\end{lstlisting}
+
+After executing above script the following KL values were obtained:
+
+{\it{Note: The results are based on natural log. Results will change if the logarithmic base is changed.}}
+
+\begin{table}[ht]
+\centering 
+\resizebox{\textwidth}{!}{\begin{tabular}{|r|l|r|r|r|r|r|r|r|r|}
+\hline
+            &$A_1$ & $A_2$ & $A_3$ & $A_4$ & $A_5$ & $A_6$ & $A_7$ & $A_8$ & $A_9$\\ \hline
+ $A_1$ & 0.0000000 & 0.337808627 & 0.299950338 & 0.412003309 &  0.6123590 & 0.58391427 & 0.3432750 & 0.55022509 & Inf \\ \hline
+ $A_2$ & 0.3320701 & 0.000000000 & 0.009437976 & 0.009539944 &  1.0896991 & 0.10583040 & 0.4264405 & 0.03310128 & Inf \\ \hline
+ $A_3$ & 0.2865234 & 0.010168265 & 0.000000000 & 0.023990547 &  0.9662030 & 0.16685163 & 0.3408481 & 0.06119475 & Inf \\ \hline
+ $A_4$ & 0.3890771 & 0.009161566 & 0.020492328 & 0.000000000 &  1.1083776 & 0.11197447 & 0.4200557 & 0.03239713 & Inf \\ \hline
+ $A_5$ & 0.8299455 & 1.069606922 & 0.910442995 & 0.986174629 &  0.0000000 & 1.50107287 & 0.3927878 & 1.30557473 & Inf \\ \hline
+ $A_6$ & 0.5183887 & 0.090028452 & 0.138466417 & 0.107613741 &  1.4184051 & 0.00000000 & 0.7224462 & 0.07709869 & Inf \\ \hline
+ $A_7$ & 0.3230336 & 0.460250702 & 0.354293665 & 0.446619451 &  0.4451732 & 0.81820075 & 0.0000000 & 0.61806423 & Inf \\ \hline
+ $A_8$ & 0.5025226 & 0.031591214 & 0.055045354 & 0.034175023 &  1.3584303 & 0.08043495 & 0.5580622 & 0.00000000 & Inf \\ \hline
+ $A_9$  &     NaN       &  NaN      &   NaN    &     NaN   &    NaN   &     NaN    &   NaN    &    NaN  &  0 \\ \hline
+\end{tabular}}
+\caption{The KL distance between attributes of the cancer set.}
+\end{table}
+
+As we can see that the last column and last row have {\it Inf} and {\it NaN} values respectively. This is because the Attribute 9: 'Mitoses' 
+
+ \end{enumerate} 
+ 
+\end{enumerate}
+
+\bibliographystyle{unsrt} 
+\begin{thebibliography}{9}
+\bibitem{wsCancerData} Michel Goossens, Frank Mittelbach, and Alexander Samarin. \textit{The \LaTeX\ Companion}. Addison-Wesley, Reading, Massachusetts, 1993.
+\bibitem{hsEntropy} Albert Einstein. \textit{Zur Elektrodynamik bewegter K{\"o}rper}. (German) [\textit{On the electrodynamics of moving bodies}]. Annalen der Physik, 322(10):891–921, 1905.
+\end{thebibliography}
+\end{document}

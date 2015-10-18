@@ -22,7 +22,7 @@ public class DataPreprocessor {
 		
 		try {
 			
-			br = new BufferedReader(new FileReader(new File(filename,"r")));
+			br = new BufferedReader(new FileReader(new File(filename)));
 			String r;
 			
 			while((r = br.readLine())!=null) {
@@ -31,14 +31,16 @@ public class DataPreprocessor {
 				
 				List<Double> raw = new ArrayList<Double>();
 				
-				for(String s:r.split(",")) {
+				String atr[] = r.split(",");
+				
+				for(String s: atr) {
 					
 //					boolean m = s.matches("?");
 //					m==true?pred.add(Double.NaN):pred.add(Double.parseDouble(s));
-					
-					if(s.matches("?"))
-						raw.add(Double.NaN);
-					else
+//					System.out.print(s);
+//					if(s.matches("?"))
+//						raw.add(double.NaN);
+//					else
 						raw.add(Double.parseDouble(s));
 					
 				}
