@@ -18,7 +18,7 @@ import java.util.logging.Logger;
  * @author MPagnis
  *
  */
-public class KMeans {
+public class KMeans2 {
 
 	// private static final Logger logger =
 	// Logger.getLogger(KMeans.class.getName());
@@ -33,11 +33,11 @@ public class KMeans {
 	double[][] centroids;
 	double[][] prevCentroids;
 	double tau;
-	int attributes = 9;
+	int attributes = 10;
 
 	List<ArrayList<double[]>> clusters;
 
-	public KMeans(double[][] predictors, int k, int iterMax, double tau) {
+	public KMeans2(double[][] predictors, int k, int iterMax, double tau) {
 
 		this.predictors = predictors;
 
@@ -66,7 +66,7 @@ public class KMeans {
 		Random r1 = new Random();
 		for (int i = 0; i < k; i++) {
 
-			double x[] = new double[10];
+//			double x[] = new double[10];
 			int j = 0;
 			// logger.log(Level.INFO, "Centroid: "+i+" \n");
 			for (j = 0; j < attributes; j++) {
@@ -76,7 +76,7 @@ public class KMeans {
 
 				// System.out.print("\t"+centroids[i].length);
 
-				x[j] = centroids[i][j];
+//				x[j] = centroids[i][j];
 			}
 
 		}
@@ -89,7 +89,7 @@ public class KMeans {
 
 		while (isStop(i)) {
 
-			assignDataToCluster(predictors);
+			assignDataToCluster();
 
 			recalculateCentroids();
 
@@ -104,39 +104,62 @@ public class KMeans {
 
 		int fp = 0;
 		int tp = 0;
+		ArrayList<String> b = new ArrayList<String>();
+		ArrayList<String> m = new ArrayList<String>();
+		
 		for (int i = 0; i < k; i++) {
 			
 			int benign = 0;
 			int mal = 0;
-	
+
+//			System.out.print("Cluster " + i + " : [ ");
+			
+			
 			ArrayList<double[]> datapoint = clusters.get(i);
 			int j = 0;
+			b.clear();
+			m.clear();
+			
 			for (j = 0; j < datapoint.size(); j++) {
-				if(datapoint.get(j)[datapoint.get(j).length-1]==2)
+				// logger.log(Level.INFO, ""+datapoint.get(j)[9]);
+//				System.out.print(" " + datapoint.get(j)[9]);
+				if(datapoint.get(j)[datapoint.get(j).length-1]==2){
+					
 					benign++;
-				else if(datapoint.get(j)[datapoint.get(j).length-1]==4)
+					b.add(""+datapoint.get(j)[0]);
+				}
+				if(datapoint.get(j)[datapoint.get(j).length-1]==4){
+					
 					mal++;
+					m.add(""+datapoint.get(j)[0]);
+				}
 			}
+//			System.out.println(" ] \n" + j);
 			
 			System.out.println("Cluster "+i+" benign count: "+benign+" Malignant count: "+ mal+ " Total count: "+datapoint.size());
 			if(benign>mal){
 				fp += mal;
 				tp += benign;
+//				System.out.println("False Positives: (Malignant classified as Benign)\n"+m+"\n");
 			}
 			else{
 				fp +=benign;
 				tp +=mal;
+//				System.out.println("False Positives: (Benign classified as Malignant)\n"+b+"\n");
 			}
+			System.out.println("Classified as benign: "+b);
+			System.out.println("Classified as Malignant: "+m+"\n");
+			
 		}
 		
 		double ppv = (double)tp/(tp+fp);
 		
-		System.out.println("PPV value: "+ ppv+"\n");
+		System.out.println("PPV value: "+ ppv+"\n\n");
 		
 		return ppv;
 	}
 
-	public void assignDataToCluster(double [][]predictors) {
+	public void assignDataToCluster() {
 
 		// empty previous clusters
 		// clusters = new ArrayList<ArrayList<double[]>>();
@@ -152,7 +175,7 @@ public class KMeans {
 			double euclideanDistance[] = new double[k];
 			for (int j = 0; j < k; j++) {
 
-				euclideanDistance[j] = calculateEuclidean(predictors, i, j);
+				euclideanDistance[j] = calculateEuclidean( i, j);
 				if (euclideanDistance[j] < min) {
 					min = euclideanDistance[j];
 					index = j;
@@ -160,8 +183,8 @@ public class KMeans {
 			}
 			ArrayList<double[]> c = clusters.get(index);
 			int l = c.size();
-			double e[] = new double[10];
-			for (int a = 0; a < 10; a++)
+			double e[] = new double[11];
+			for (int a = 0; a < 11; a++)
 				e[a] = predictors[i][a];
 
 			clusters.get(index).add(l, e);
@@ -170,10 +193,10 @@ public class KMeans {
 
 	}
 
-	private double calculateEuclidean(double [][]predictors,int i, int j) {
+	private double calculateEuclidean(int i, int j) {
 
 		double euclideanDist = 0.0;
-		for (int a = 0; a < attributes; a++) {
+		for (int a = 1; a < attributes; a++) {
 //			if(a==exclude1)// & a!=exclude2)
 			euclideanDist += (predictors[i][a] - centroids[j][a]) * (predictors[i][a] - centroids[j][a]);
 		}
@@ -199,12 +222,12 @@ public class KMeans {
 
 				n++;
 
-				for (int atribute = 0; atribute < attributes; atribute++) {
+				for (int atribute = 1; atribute < attributes; atribute++) {
 //					if(atribute==exclude1)// & atribute!=exclude2)
 					avg[atribute] += d[atribute];
 				}
 			}
-			for (int atribute = 0; atribute < attributes; atribute++) {
+			for (int atribute = 1; atribute < attributes; atribute++) {
 
 				avg[atribute] /= n;
 				centroids[cl][atribute] = avg[atribute];
@@ -247,21 +270,21 @@ public class KMeans {
 	}
 
 
-	public static double[][] readData(String filename) {
+	public static double[][] readData(int rows, String filename) {
 
 		// "C:\\Users\\mpagnis\\Documents\\personal\\R\\newclean.data"
 		BufferedReader br = null;
 		double[][] predictors = null;
 		try {
-
+			
 			br = new BufferedReader(new FileReader(new File(filename)));
-			predictors = new double[675][];
+			predictors = new double[rows][];
 			String r;
 			int i = 0;
 			while ((r = br.readLine()) != null) {
 				// logger.log(Level.INFO, "\nline: "+r);
 
-				predictors[i] = new double[10];
+				predictors[i] = new double[11];
 
 				String atr[] = r.split(",");
 				int j = 0;
@@ -292,73 +315,62 @@ public class KMeans {
 
 		return predictors;
 	}
-	public void crossValidate(double [][]predictors){
+	
+	public void assignTestData(double [][]predictors){
 		
-		double [][]train;
-		double [][]test = new double[67][];
-		int seed = 67;
-		train = new double[675-seed][];
-		for(int i = 0; i<seed; i++){
-			test[i] = new double[10];
-			test[i] = predictors[i];
+		for (ArrayList<double[]> list : clusters) {
+			list.clear();
 		}
-		for(int i=seed;i<675;i++){
-			train[i] = new double[10];
-			train[i] = predictors[i];
+
+		for (int i = 0; i < predictors.length; i++) {
+
+			double min = Double.POSITIVE_INFINITY;
+			int index = 0;
+			double euclideanDistance[] = new double[k];
+			for (int j = 0; j < k; j++) {
+
+				double euclideanDist = 0.0;
+				for (int a = 1; a < attributes; a++) {
+//					if(a==exclude1)// & a!=exclude2)
+					euclideanDist += (predictors[i][a] - centroids[j][a]) * (predictors[i][a] - centroids[j][a]);
+				}
+
+				euclideanDistance[j] = Math.sqrt(euclideanDist);
+				if (euclideanDistance[j] < min) {
+					min = euclideanDistance[j];
+					index = j;
+				}
+			}
+			ArrayList<double[]> c = clusters.get(index);
+			int l = c.size();
+			double e[] = new double[11];
+			for (int a = 0; a < 11; a++)
+				e[a] = predictors[i][a];
+
+			clusters.get(index).add(l, e);
+			// System.out.println();
 		}
-		
-		
+
 		
 	}
+	
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		String filename = "C:\\Users\\mpagnis\\Documents\\personal\\R\\newclean.data";
+		String filename = "C:\\Users\\mpagnis\\Documents\\personal\\R\\uniq675.data";
 
-		double[][] predictors = readData(filename);
-		double [][]train;
-		double [][]test; 
-		int seed = 67;
-		
-		double totalPPV = 0.0;
-		
-		for(int v = 0; v<10; v++){
-			
-			test = new double[67][];
-			train = new double[675-seed][];
-			
-			int tr = 0;
-			int te = 0;
-			
-			int start = v*seed;
-			
-			for(int i = 0; i<675; i++){
-				
-				if(i>=start & i<start+seed){
-					test[te] = new double[10];
-					test[te] = predictors[i];
-					te++;
-				}
-				else{
-					train[tr] = new double[10];
-					train[tr] = predictors[i];
-					tr++;
-				}
-				
-			}
-			
-			KMeans km = new KMeans(train,2,50,0.10);
-			
-			km.initializeCentroids();
-			km.cluster();
-			
-			km.assignDataToCluster(test);
-			
-			System.out.println("Test = "+(v+1));
-			totalPPV += km.printClusters();
-		}
-		
-		System.out.println("Delta PPV: "+ totalPPV/10);
+		double[][] predictors = readData(675,filename);
 
+		KMeans2 km = new KMeans2(predictors, 2, 50, 0.10);
+		km.initializeCentroids();
+		km.cluster();
+		
+		String missing = "C:\\Users\\mpagnis\\Documents\\personal\\R\\missing.data";
+
+		double[][] missData = readData(16,missing);
+		
+		km.assignTestData(missData);
+
+		km.printClusters();
 	}
 
 }

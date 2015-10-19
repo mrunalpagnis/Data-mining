@@ -84,8 +84,8 @@ framexleftmargin=15pt}
 \subsection{Solutions}
 
 \begin{enumerate}
-\item \hbox{Does the algorithm always converge? Given your answer, what extra formal parameter is needed  to the function.  How do you decide it's actual value?
-\\\em Answer:\\ \sf}
+\item Does the algorithm always converge? Given your answer, what extra formal parameter is needed  to the function.  How do you decide it's actual value?
+\\{\em{Answer:}}\\ 
     
     The K-Means algorithm is said to converge when there is no change in the consecutive centroids. However, exactly same consecutive centroids is difficult to achieve in practice. Due to reasons like flipping of centroids and floating points errors the algorithm may not always converge. The convergence also depends on the Distance function used. Euclidean distance is a monotone function which goes on decreasing or remains same. Other functions like Manhattan may never lead to convergence. Having said that, in practice things are difficult to achieve.  
     \\Now, by considering ${\tau}$ the percentage change in centroids we can allow a tolerance or margin or change in the consecutive centroids. So we say that the algorithm has converged when there is less than ${\tau}$ percent change. The good thing is that we get to decide this value of ${\tau}$ which means ${\tau}$ is the quality of clustering achieved. For instance, when the optimality of clusters is less important than the time required for clustering then ${\tau}$ value can be set to a higher value. When the accuracy is more important we keep ${\tau}$ closer to zero. 
@@ -101,40 +101,40 @@ framexleftmargin=15pt}
 
 \item What is the reason initialization of $k$-means is problematic?
 
-\hbox{\em Answer: \\} 
-\sf Firstly, there is no particular way to initialize the K-Means. There are multiple ways in which one can initialize the centroids. Secondly, each method has its own pros and cons.\\
+{\em{Answer: }}\\
+Firstly, there is no particular way to initialize the K-Means. There are multiple ways in which one can initialize the centroids. Secondly, each method has its own pros and cons.\\
 
 I would like to discuss about  a few such initialization techniques:
 
     \begin{itemize}
-    \item \em Choose centroids randomly from $DOM(\Delta)$\\
-        \sf In this method, the centroids are initialized to a different value each time we run the K-Means, so in each run there is high probability of getting different clusters. Another issue with the random selection of centroids is that we need to know the distribution of the function so that the selected centroids are evenly distributed in the data.
-    \item \em Choose centroids from the sequence of data
-    \sf ${C_{0}=\delta_{0}}$, ${C_{1}=\delta_{1}}$, ..., ${C_{k}=\delta_{k}}$\\
+    \item {\em{Choose centroids randomly from $DOM(\Delta)$\\}}
+        In this method, the centroids are initialized to a different value each time we run the K-Means, so in each run there is high probability of getting different clusters. Another issue with the random selection of centroids is that we need to know the distribution of the function so that the selected centroids are evenly distributed in the data.
+    \item {\em{Choose centroids from the sequence of data
+    ${C_{0}=\delta_{0}}$, ${C_{1}=\delta_{1}}$, ..., ${C_{k}=\delta_{k}}$\\}}
     This might lead to forming singleton clusters depending on the nature of data. There is a chance of centroids being too close in the final output. The distribution of the data is not addressed by this type of initialization.
-    \item \em Selecting Farthest centroids: ${C_{0}=Random(DOM(\delta))}$, ${C_{1}=}$ farthest point from ${C_{0}}$, ${C_{2}=}$ farthest point from ${C_{1}}$, ... and so on.\\
-    \sf Let us consider a set: $\{{1,2,3,...10}\}$ we want to run K-Means on. Let us say k=3.\\
+    \item {\em{Selecting Farthest centroids: ${C_{0}=Random(DOM(\delta))}$, ${C_{1}=}$ farthest point from ${C_{0}}$, ${C_{2}=}$ farthest point from ${C_{1}}$, ... and so on.}}\\
+    Let us consider a set: $\{{1,2,3,...10}\}$ we want to run K-Means on. Let us say k=3.\\
     Now in this type of initialization the first centroids gets selected randomly, so we pick ${C_{0} = 1}$ the farthest point to this will be 10. ${\therefore C_{1} = 10}$. For the third centroid we again get ${C_{1} = 1}$ because 1 is farthest to 10. 
     \\Above example clearly shows that duplicate centroids may get assigned due to this method.
     \end{itemize}
     As we see there is no fixed method to initialize the centroids and thus, there are different problems associated with different methods. We have to trade-off according to what best suits our data-set.
-\item \hbox{What is the run-time of this algorithm (include your new parameter from Question 1.\\
-\em Answer: \\ \sf}
+\item What is the run-time of this algorithm (include your new parameter from Question 1.\\
+{\em{ Answer: \\}}
 
 ${\mathcal{O}(|\Delta|*A*k*i)}$\\
 $where$ \\
-${|\Delta| }$ \it is the number of instances in the data-set\\
+${|\Delta| }$ {\it{is the number of instances in the data-set\\
 A is the number of dimensions or attributes in the data-set\\
 k is the number of clusters\\
-i is the extra-formal parameter 'Maximum-Iterations' K-Means should run\sf
-\item \hbox{In line 21, we use $ave$ to indicate average; however, the centroid is more correctly the best representative of the data that nearest.  Give two more ways (functions) that yield a best representative.\\
-\em Answer: \\ \sf }
+i is the extra-formal parameter 'Maximum-Iterations' K-Means should run}}
+\item In line 21, we use $ave$ to indicate average; however, the centroid is more correctly the best representative of the data that nearest.  Give two more ways (functions) that yield a best representative.\\
+{\em{ Answer: \\}} 
 
     \begin{itemize}
     
     \item Medoids:\\
-    A \it medoid \sf of a finite data-set is a data point from this set, whose average dissimilarity to all the data points is minimal i.e. it is the most centrally located point in the set.\cite{kmeWiki} 
-    The centroid now becomes the \it medoid \sf. So in essence it is the closest element to all other elements in that cluster. There is an algorithm which uses \it medoid \sf known as k-Medoids Algorithm. This algorithm is similar to K-Means to a great extent. This algorithm is more robust to noise and outliers than K-Means. This is because it minimizes the pairwise dissimilarities between data points than just minimizing the sum squared error.  
+    A {\it {medoid}} of a finite data-set is a data point from this set, whose average dissimilarity to all the data points is minimal i.e. it is the most centrally located point in the set.
+    The centroid now becomes the {\it {medoid}}. So in essence it is the closest element to all other elements in that cluster. There is an algorithm which uses {\it {medoid}} known as k-Medoids Algorithm. This algorithm is similar to K-Means to a great extent. This algorithm is more robust to noise and outliers than K-Means. This is because it minimizes the pairwise dissimilarities between data points than just minimizing the sum squared error.  
     
     \item Weighted Average
     Another alternative to average is a weighted average. We can weigh the points in the clusters depending on how close they are to the centroid. It can be mathematically represented as follows:
@@ -151,11 +151,11 @@ i is the extra-formal parameter 'Maximum-Iterations' K-Means should run\sf
     
     \end{itemize}
 
-\item \hbox{Modify the algorithm to identify when two centroids are \it too \sf close to one another.   There will likely be more than one extra parameter needed to the algorithm.  Discuss what your modification does.\\}
+\item Modify the algorithm to identify when two centroids are {\it{ too}} close to one another.   There will likely be more than one extra parameter needed to the algorithm.  Discuss what your modification does.\\
 
-\em Answer: \\\sf
+{\em{ Answer: \\}}
 
-\hbox{We have studied the inter-block distance earlier. Inter-block distance gives an idea of how close or far the blocks are to each other. We can find the proximity of two centroids in the similar way. First we calculate the inter-block distance for clusters and then compare is with previous inter-block distance. If the distance increases we can say that the centroids are moving apart however, if the distance decreases that means the centroids are coming closer. However, we need a measure or a threshold that gives a relative closeness. We define it as minimum-closeness $\nu$. If the change in the inter-block distances is less than $\nu$ then we say the centroids are too close. \\\\}
+We have studied the inter-block distance earlier. Inter-block distance gives an idea of how close or far the blocks are to each other. We can find the proximity of two centroids in the similar way. First we calculate the inter-block distance for clusters and then compare is with previous inter-block distance. If the distance increases we can say that the centroids are moving apart however, if the distance decreases that means the centroids are coming closer. However, we need a measure or a threshold that gives a relative closeness. We define it as minimum-closeness $\nu$. If the change in the inter-block distances is less than $\nu$ then we say the centroids are too close. \\\\
 
 The algorithm is defined as follows:
 
@@ -301,7 +301,7 @@ The above $d(\texttt{x}, \texttt{y})$ is 3 because there are three bits differen
 \item $d(\texttt{N\textvisiblespace orth}, \texttt{nort\textvisiblespace h}) = 5$
 \item $d(upper(space(\texttt{N\textvisiblespace orth})), upper(space(\texttt{nort\textvisiblespace h}))) = 0$
 \item $d(\texttt{north}, \texttt{south}) = 2$
-\item Because strings are seldom fixed to any length, finding distance is even more difficult. strings of unequal length.  The table below shows {\it some} strings indicating the direction prefixed or suffixed to addresses:
+\item Because strings are seldom fixed to any length, finding distance is even more difficult. strings of unequal length.  The table below shows {\it{some}} strings indicating the direction prefixed or suffixed to addresses:
 \begin{center}
 \begin{tabular}{l} \hline 
 NORTH \\
@@ -367,8 +367,10 @@ The given data is in a raw form, not clean and also contains duplicates. Here ar
 \end{itemize}
 
 
-In order to solve the following questions I have cleaned the data. I have multiple versions of data-set. Different versions of data-set may be applicable to different questions. These different versions are based on certain assumptions. The modified data-set and its assumption is as follows:\\
+In order to solve the following questions I have cleaned the data. I have multiple versions of data-set. Different versions of data-set may be applicable to different questions. These different versions are based on certain assumptions. The modified data-set and descriptions are in Table.1\\
 \begin{center}
+\bgroup
+\def\arraystretch{1.7}
 \begin{table}[ht]
 \centering
 \begin{tabular}{|c||p{10cm}|}
@@ -387,8 +389,11 @@ benign & {\texttt{tuples whose Class is 2 (Classified as benign).}} \\ \hline
 \caption{Data-sets formed and their descriptions}
 \label{tab:my_label}
 \end{table}
+\egroup
 \end{center}
-\begin{enumerate}\item  Suppose you're working to help a clinic serve a community that has limited resources to identify then treat breast cancer.  The cost of a biopsy is from \$1000 to \$5000.  The cost of a masectomy is \$15,000 to \$55,000 (these are representative costs in 2015).   
+\begin{enumerate}
+
+\item  Suppose you're working to help a clinic serve a community that has limited resources to identify then treat breast cancer.  The cost of a biopsy is from \$1000 to \$5000.  The cost of a masectomy is \$15,000 to \$55,000 (these are representative costs in 2015).   
 
  \begin{enumerate} \item What was the total cost of the biopsies? 
  
@@ -419,12 +424,47 @@ benign & {\texttt{tuples whose Class is 2 (Classified as benign).}} \\ \hline
  \begin{itemize}
  \item 16 missing values
  \item 16 rows with missing values
- \item 
+ \item I would recommend reexamination for three women out of these 16 women whose 'Bare Nuclei' value is missing. The SCNs of these three women are 1057013, 1096800 and 704168. Out of which 1057013 is malignant and other two are benign. This is because I ran the KMeans to train the uniqData and got the centroids. Then tested the MissingData by substituting missing 'Bare Nuclei' as mean of 'Bare Nuclei' of rest of the data. The figure.1 shows results of program when missing data is tested against train data. \\ Considering \$3000 as average cost of Biopsey, the cost for three Biopseys  is $3*3000 =$ \$$9000$
+ 
+ \begin{figure}[t]
+\includegraphics{output_missingData}
+\centering
+\caption{Classification results on missing data}
+\end{figure}
+ \item 46 tuples have duplicate SCN, 8 tuples are exact duplicates and 16 values are missing. So the total is 70 errors. The error is $70/699 = 0.10$.
+ \item In order to replace the missing data there are three ways either to fill it with zeros or to fill it with mean of rest of the data or to put random numbers. Figure.2 shows the new data with random numbers:
+
+\begin{center} 
+ \begin{tabular}{|c|c|c|}
+\hline 
+SCN&Attribute&New Data \\ \hline
+1057013&Bare Nuclei&9\\ \hline
+1096800&Bare Nuclei&1\\ \hline
+1183246&Bare Nuclei&3\\ \hline
+1184840&Bare Nuclei&10\\ \hline
+1193683&Bare Nuclei&5\\ \hline
+1197510&Bare Nuclei&3\\ \hline
+1241232&Bare Nuclei&6\\ \hline
+169356&Bare Nuclei&7\\ \hline
+432809&Bare Nuclei&10\\ \hline
+563649&Bare Nuclei&6\\ \hline
+606140&Bare Nuclei&8\\ \hline
+61634&Bare Nuclei&4\\ \hline
+704168&Bare Nuclei&9\\ \hline
+733639&Bare Nuclei&8\\ \hline
+1238464&Bare Nuclei&6\\ \hline
+1057067&Bare Nuclei&4\\ \hline
+
+ \end{tabular}
+ \end{center}
+ 
  \end{itemize}
  \begin{enumerate} 
  \item Is the amount of missing data significant?\\
+ Yes, the missing data is 16 tuples. All of them have 'Bare Nuclei' value missing. Refering the Table.2 and Table.3 we know that the 'Bare Nuclei' has highest variance and lowest entropy. So 16 missing values can affect the data set significantly. 
+ \item Assess the significance of either keeping or removing the tuples with unknown data. You should consider both the morbidity and cost.\\
+ Well, we should remove the missing data from the train set. This is because the random values can affect the data significantly. So keeping this data can change the results. It is a question of 675 people at the cost of 16 people. As I said previously 3 women from the missing data should get rechecked. Rest of the data we can ignore safely.
  
- \item Assess the significance of either keeping or removing the tuples with unknown data. You should consider both the morbidity and cost.
  \end{enumerate}
  
 \item Assume the attribute \texttt{Clump Thickness} is $A_1$, \texttt{Uniformity of Cell Size} is $A_2$ and so on.  Attribute $A_{10}$ has only two domain values and is the classifier. For $\Delta^*$ and  the attributes $A_i, 1\leq i \leq 9$ \begin{enumerate} 
@@ -445,10 +485,15 @@ variance(numbers)  => 0.667
 \end{lstlisting}
 \end{center}
 
-\begin{table}[]
+The data-set used for this test was uniqData with 675 rows. That is removing the 16 rows with missing data and 8 duplicates. (refer Table.1 for data-set description).
+
+\bgroup
+\def\arraystretch{1.5}
+\begin{table}[ht]
 \centering
-\begin{tabular}{|c|c|}
+\begin{tabular}{|c||c|}
 \hline
+Attribute & Variance \\ \hline \hline
 Clump Thickness & 7.94546 \\ \hline
 Uniformity of Cell Size & 9.31923 \\ \hline
 Uniformity of Cell Shape & 8.846736 \\ \hline
@@ -460,14 +505,13 @@ Normal Nucleoli & 9.384024 \\ \hline
 Mitoses & 3.026612 \\ \hline
 \end{tabular}
 \caption{The variances of attributes}
-\label{tab:my_label}
 \end{table}
-
-As we can see the table shows Maximum variance is of {\em{Bare Nuclei 13.2145}}
+\egroup
+As we can see the Table.2 shows Maximum variance is of {\em{Bare Nuclei 13.2145}}
 
 \item which $A_i$ has the lowest entropy? You may use the {\texttt R} package {\texttt {entropy}} by Hausser and Strimmer.  \\
 
-I used the Entropy package\cite{hsEntropy} with help of the following R commands:
+I used the Entropy package with help of the following R commands:
 \begin{center}
 \begin{lstlisting}[language=R]
 install.packages("entropy")
@@ -477,10 +521,13 @@ entropy.empirical(uniqData$V2, unit=c("log"))
 \end{center}
  
 \begin{center}
+\bgroup
+\def\arraystretch{1.5}
 \begin{table}[ht]
 \centering
-\begin{tabular}{|c|c|}
+\begin{tabular}{|c||c|}
 \hline
+Attribute & Entropy \\ \hline \hline
 Clump Thickness & 6.310634 \\ \hline
 Uniformity of Cell Size & 6.111481 \\ \hline
 Uniformity of Cell Shape & 6.138426 \\ \hline
@@ -493,16 +540,44 @@ Mitoses & 6.179103 \\ \hline
 \end{tabular}
 \caption{The Entropy values of each attribute.}
 \end{table}
+\egroup
 \end{center}
-As we can see the table shows Lowest Entropy is of {\em{Bare Nuclei 6.045939}}\\
+As we can see the Table.3 shows Lowest Entropy is of {\em{Bare Nuclei 6.045939}}\\
 
-\item Fill-in the table below  with the KL distance for attribute pairs.  For this we construct a mass function $P_i$ over $A_i$ by simple counting.  For a cell whose row, column entries are $A_i, A_j$, find $d_{KL}(P_i||P_j)$.  You may use an existing {\texttt {R}} function for this, but you need to provide sufficient package details for someone who would consider using that package.\\ \sf
+\item Fill-in the table below  with the KL distance for attribute pairs.  For this we construct a mass function $P_i$ over $A_i$ by simple counting.  For a cell whose row, column entries are $A_i, A_j$, find $d_{KL}(P_i||P_j)$.  You may use an existing {\texttt {R}} function for this, but you need to provide sufficient package details for someone who would consider using that package.\\ 
 
 The Kullback-Leibler divergence is
 \begin{eqnarray*}
 KL(p||q) =  &=& \Sigma_{i=1}^n p_i \log \frac{p_i}{q_i}
 \end{eqnarray*}
 
+
+\bgroup
+\def\arraystretch{1.7}
+\begin{table}[ht]
+\centering 
+\resizebox{\textwidth}{!}{\begin{tabular}{|r||l|r|r|r|r|r|r|r|r|}
+\hline
+            &$A_1$ & $A_2$ & $A_3$ & $A_4$ & $A_5$ & $A_6$ & $A_7$ & $A_8$ & $A_9$\\ \hline \hline
+ $A_1$ & 0.0000000 & 0.337808627 & 0.299950338 & 0.412003309 &  0.6123590 & 0.58391427 & 0.3432750 & 0.55022509 & Inf \\ \hline
+ $A_2$ & 0.3320701 & 0.000000000 & 0.009437976 & 0.009539944 &  1.0896991 & 0.10583040 & 0.4264405 & 0.03310128 & Inf \\ \hline
+ $A_3$ & 0.2865234 & 0.010168265 & 0.000000000 & 0.023990547 &  0.9662030 & 0.16685163 & 0.3408481 & 0.06119475 & Inf \\ \hline
+ $A_4$ & 0.3890771 & 0.009161566 & 0.020492328 & 0.000000000 &  1.1083776 & 0.11197447 & 0.4200557 & 0.03239713 & Inf \\ \hline
+ $A_5$ & 0.8299455 & 1.069606922 & 0.910442995 & 0.986174629 &  0.0000000 & 1.50107287 & 0.3927878 & 1.30557473 & Inf \\ \hline
+ $A_6$ & 0.5183887 & 0.090028452 & 0.138466417 & 0.107613741 &  1.4184051 & 0.00000000 & 0.7224462 & 0.07709869 & Inf \\ \hline
+ $A_7$ & 0.3230336 & 0.460250702 & 0.354293665 & 0.446619451 &  0.4451732 & 0.81820075 & 0.0000000 & 0.61806423 & Inf \\ \hline
+ $A_8$ & 0.5025226 & 0.031591214 & 0.055045354 & 0.034175023 &  1.3584303 & 0.08043495 & 0.5580622 & 0.00000000 & Inf \\ \hline
+ $A_9$  &     NaN       &  NaN      &   NaN    &     NaN   &    NaN   &     NaN    &   NaN    &    NaN  &  0 \\ \hline
+\end{tabular}}
+\caption{The KL distance between attributes of the cancer set.}
+\end{table}
+\egroup
+
+{\it{Note: The results are based on natural log. Results will change if the logarithmic base is changed.}}
+
+
+
+As we can see in Table.4 that the last column and last row have {\it Inf} and {\it NaN} values respectively. This is because the Attribute 9: 'Mitoses' has 0 tuples with a value 9. Therefore, we get NaN when P(A9) is numerator of Log and Inf (infinity) when P(A9) is the denominator of the Log.\\\\
 \pagebreak
 The KL divergence R script:
 
@@ -553,37 +628,101 @@ for(i in 1:9){
 print(kl)
 \end{lstlisting}
 
-After executing above script the following KL values were obtained:
+After executing above script the following KL values were obtained.
 
-{\it{Note: The results are based on natural log. Results will change if the logarithmic base is changed.}}
 
-\begin{table}[ht]
-\centering 
-\resizebox{\textwidth}{!}{\begin{tabular}{|r|l|r|r|r|r|r|r|r|r|}
-\hline
-            &$A_1$ & $A_2$ & $A_3$ & $A_4$ & $A_5$ & $A_6$ & $A_7$ & $A_8$ & $A_9$\\ \hline
- $A_1$ & 0.0000000 & 0.337808627 & 0.299950338 & 0.412003309 &  0.6123590 & 0.58391427 & 0.3432750 & 0.55022509 & Inf \\ \hline
- $A_2$ & 0.3320701 & 0.000000000 & 0.009437976 & 0.009539944 &  1.0896991 & 0.10583040 & 0.4264405 & 0.03310128 & Inf \\ \hline
- $A_3$ & 0.2865234 & 0.010168265 & 0.000000000 & 0.023990547 &  0.9662030 & 0.16685163 & 0.3408481 & 0.06119475 & Inf \\ \hline
- $A_4$ & 0.3890771 & 0.009161566 & 0.020492328 & 0.000000000 &  1.1083776 & 0.11197447 & 0.4200557 & 0.03239713 & Inf \\ \hline
- $A_5$ & 0.8299455 & 1.069606922 & 0.910442995 & 0.986174629 &  0.0000000 & 1.50107287 & 0.3927878 & 1.30557473 & Inf \\ \hline
- $A_6$ & 0.5183887 & 0.090028452 & 0.138466417 & 0.107613741 &  1.4184051 & 0.00000000 & 0.7224462 & 0.07709869 & Inf \\ \hline
- $A_7$ & 0.3230336 & 0.460250702 & 0.354293665 & 0.446619451 &  0.4451732 & 0.81820075 & 0.0000000 & 0.61806423 & Inf \\ \hline
- $A_8$ & 0.5025226 & 0.031591214 & 0.055045354 & 0.034175023 &  1.3584303 & 0.08043495 & 0.5580622 & 0.00000000 & Inf \\ \hline
- $A_9$  &     NaN       &  NaN      &   NaN    &     NaN   &    NaN   &     NaN    &   NaN    &    NaN  &  0 \\ \hline
-\end{tabular}}
-\caption{The KL distance between attributes of the cancer set.}
-\end{table}
-
-As we can see that the last column and last row have {\it Inf} and {\it NaN} values respectively. This is because the Attribute 9: 'Mitoses' 
 
  \end{enumerate} 
- 
-\end{enumerate}
+\item  Implement $k$-means so that you can cluster $\Delta^*$.   Since we have labels for the data, we can measure the quality of the clustering.  If an element of $\delta$ is correctly clustered in $c_i$ (nearest to the correct centroid), then it is considered a True Positive (TP).  If an element that correctly belongs to $c_i$ is clustered in a different $c_j$ (in other words, nearer and incorrect centroid), then the element is a False Positive (FP). The Positive Predictive Value (PPV) is
+\begin{eqnarray}
+  PPV &=& \frac{TP}{TP+FP}\label{tp} \end{eqnarray}  Investigate varying the number of blocks as well as the attributes used.  There are a modest number of attributes, so should use the powerset.  Discuss the result with simply finding pairs of correlations.\\\\ 
+  \begin{figure}[t]
+\includegraphics{output_train}
+\centering
+\caption{PPV of complete data-set}
+\end{figure}
+  \bgroup
+  \def\arraystretch{1.6}
+  \begin{table}[ht]
+  \centering
+  \begin{tabular}{|c|c|c|}
+  \hline
+  {\bf{Attributes}} & {\bf{K clusters}} & {\bf{PPV}} \\ \hline \hline
+  {\em{All 9 attributes}} & {\em{2 clusters}} & {\em{0.96}}  \\ \hline \hline
+  All 9 attributes & 5 clusters & 0.9718 \\ \hline
+  All 9 attributes & 10 clusters & 0.9718\\ \hline
+  All 9 attributes & 15 clusters & 0.9703\\ \hline
+  All 9 attributes & 20 clusters & 0.9689\\ \hline \hline
+  8 attributes excluding 'Mitosis' & 2 clusters & 0.96\\ \hline
+  
+  8 attributes excluding 'Bare Nuclei' & 2 clusters & 0.9555\\ \hline \hline
+  
+  7 attributes excluding 'Bare Nuclei' and 'Mitosis'  & 2 clusters & 0.9555\\ \hline
+  7 attributes excluding 'Bare Nuclei' and 'Uniformity of Cell Size'  & 2 clusters & 0.9555\\ \hline
+  7 attributes excluding 'Bare Nuclei' and 'Normal Nucleoli'  & 2 clusters & 0.9418\\ \hline \hline
+  
+  Only with 'Bare Nuclei' & 2 clusters & 0.8859\\ \hline
+  Only with 'Bare Nuclei' & >5 clusters & 0.9111\\ \hline
+  Only with 'Mitosis' & 2 clusters & 0.7007\\ \hline
+  
+  \end{tabular}
+  \caption{Positive Predictive Values with varying blocks and attributes}
+  \end{table}
+  \egroup
+The Table.5 shows us the PPV values of varying block sizes and attributes. Table.5 lists only selected PPV values from the power-set of the attributes. The very first row in Table.5 is the PPV for data-set with all attributes and 2 blocks. Then the next next four rows are for varying number of block sizes. Block size 5-10 gives the best results. \\
+If we run KMeans on 8 attributes removing the last attribute 'Mitosis' then it least affects the results as you can see in Table.5. The reason is that 'Mitosis' has the lowest Variance value. As opposed to this, if we run KMeans excluding the 'Bare Nuclei' the PPV value goes down. The difference is not significantly large however, the reason of PPV decrease is that the Variance of Bare Nuclei is highest. \\
+If we exclude two variables with highest variances or lowest entropy values then the PPV value further drops down. Where as if we exclude least variance attributes then PPV does not change. \\
+If we use only one attribute to cluster then 'Bare Nuclei' gives the best results and 'Mitosis' gives the poorest results. \\ For all other varying number of attributes the PPV is not significantly affected. The PPV value remains in the range 0.85 - 0.93 for combinations of 2-7 attributes. No two particular attributes have significantly different results other than 'Bare Nuclei' and 'Normal Nucleoli'. \\
+{\em{We can say that attributes with high variance or low entropy play an important role in clustering.}}
 
-\bibliographystyle{unsrt} 
-\begin{thebibliography}{9}
-\bibitem{wsCancerData} Michel Goossens, Frank Mittelbach, and Alexander Samarin. \textit{The \LaTeX\ Companion}. Addison-Wesley, Reading, Massachusetts, 1993.
-\bibitem{hsEntropy} Albert Einstein. \textit{Zur Elektrodynamik bewegter K{\"o}rper}. (German) [\textit{On the electrodynamics of moving bodies}]. Annalen der Physik, 322(10):891–921, 1905.
-\end{thebibliography}
+
+\item One of the most common techniques in assessing function is using $V$-fold cross validation.  The idea is simple.  Suppose $|\Delta^*| = N$.  Partition $\Delta^*$ into $V=10$ sets $D^* = \{D_1^*,D_2^*,\ldots, D_{10}^*\}$ such that each $|D_i^*| = \frac{N}{10}$ tuples and all $D_i, D_j$ are pairwise disjoint.  The task is to use $V-1$ sets to train and the remaining $d$ to test.  
+
+\begin{center}
+\bgroup
+\def\arraystretch{2}
+\begin{table}[ht]
+\centering
+\begin{tabular}{|l||c|c|}
+\hline
+\textsf{Train} & \textsf{Test} & \textsf{PPV Result}\\  \hline \hline 
+${kmeans}(D^* - \{ D_1^*\})$    & $D_1^*$   &$0.8358$\\ \hline
+${kmeans}(D^* - \{ D_2^*\})$    & $D_2^*$    & $0.9522$\\ \hline
+${kmeans}(D^* - \{ D_3^*\})$    & $D_3^*$    & $0.9851$\\ \hline
+${kmeans}(D^* - \{ D_4^*\})$    & $D_4^*$    & $0.9402$\\ \hline
+${kmeans}(D^* - \{ D_5^*\})$    & $D_5^*$    & $0.9402$\\ \hline
+${kmeans}(D^* - \{ D_6^*\})$    & $D_6^*$    & $0.9851$\\ \hline
+${kmeans}(D^* - \{ D_7^*\})$    & $D_7^*$    & $0.9522$\\ \hline
+${kmeans}(D^* - \{ D_8^*\})$    & $D_8^*$    & $1.0$\\ \hline
+${kmeans}(D^* - \{ D_9^*\})$    & $D_9^*$    & $1.0$\\ \hline
+${kmeans}(D^* - \{ D_{10}^*\})$    & $D_{10}^*$    & $1.0$\\ \hline
+\end{tabular}
+\caption{Cross Validation PPV results}
+\end{table}
+\egroup
+\end{center}
+
+The total PPV is then 
+\begin{eqnarray}
+ PPV(\Delta) &=& (1/10)\Sigma_{i=1}^{10} \alpha_i
+\end{eqnarray}
+Calculate the PPV using $V$-fold cross validation.  Discuss your results. \\
+Table.6 gives the values for all test sets. The PPV using V-fold cross validation is:
+\begin{eqnarray}
+ PPV(\Delta) &=& 0.9597
+\end{eqnarray}
+
+\end{enumerate}
+\begin{figure}[t]
+\includegraphics{output_test1-6}
+\centering
+\caption{PPV results for test 1 to 6}
+\end{figure}
+
+\begin{figure}[t]
+\includegraphics{output_test7-10}
+\centering
+\caption{PPV results for test 7 to 10}
+\end{figure}
+
 \end{document}
